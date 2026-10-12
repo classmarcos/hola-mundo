@@ -10,7 +10,7 @@ app = FastAPI(title="Hola Mundo")
 
 @app.get("/")
 def hola() -> dict:
-    return {"mensaje": "Hola mundo", "ambiente": APP_ENV}
+    return {"mensaje": "Hola mundo v2", "ambiente": APP_ENV}
 
 
 @app.get("/health")

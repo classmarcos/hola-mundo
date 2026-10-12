@@ -10,7 +10,7 @@ client = TestClient(main.app)
 def test_hola_mundo():
     r = client.get("/")
     assert r.status_code == 200
-    assert r.json()["mensaje"] == "Hola mundo"
+    assert r.json()["mensaje"] == "Hola mundo v2"
 
 
 def test_health():
