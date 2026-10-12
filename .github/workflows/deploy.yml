@@ -1,0 +1,35 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Etiqueta a publicar en producción (ej. v0.1.0). Sirve para volver atrás."
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  staging:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, linux, hola]
+    environment: staging
+    concurrency: deploy-staging
+    steps:
+      - env:
+          REF: ${{ github.sha }}
+        run: sudo /usr/local/sbin/hola-deploy staging "$REF"
+
+  produccion:
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    runs-on: [self-hosted, linux, hola]
+    environment: production
+    concurrency: deploy-production
+    steps:
+      - env:
+          REF: ${{ inputs.ref || github.ref_name }}
+        run: sudo /usr/local/sbin/hola-deploy prod "$REF"

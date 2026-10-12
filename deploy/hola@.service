@@ -1,0 +1,15 @@
+[Unit]
+Description=Hola mundo (%i)
+After=network-online.target
+
+[Service]
+User=hola
+WorkingDirectory=/opt/hola/%i
+EnvironmentFile=/etc/hola/%i.env
+EnvironmentFile=-/etc/hola/%i.version
+ExecStart=/opt/hola/%i/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port ${PORT}
+Restart=always
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
